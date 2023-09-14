@@ -1,2 +1,39 @@
 @import "reset";
 @import "./variables/global.scss";
+
+// перенести в соответствующий pages
+.page {
+    min-height: 100%;
+}
+
+// .page {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center;
+// }
+
+// перенести в соотв компоненту слой
+
+.header-container{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+
+    align-items: center;
+    // justify-content: center;
+}
+
+//
+
+.content-container{
+    display: flex;
+    flex-direction: column;
+
+    margin-top: 20px;
+}
+
+.content__text{
+    padding-left: 10px;
+}
