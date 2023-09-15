@@ -4,7 +4,8 @@ import cls from "./MainPage.module.scss"
 import { Task } from "entities/Task";
 import { Button, Input } from 'antd';
 
-import {v4 as uuidv4} from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
+import initTasksState from "entities/getTasksList/initTaskState";
 
 interface MainPageProps {
     className?: string;
@@ -14,13 +15,12 @@ interface MainPageProps {
 export const MainPage: FC<MainPageProps> = (props) => {
 
     // логика изменения состояния задачи
-    const [tasks, setTodos] = useState([
-        { id: crypto.randomUUID(), text: 'сходить в магазин', isDone: false },
-        { id: crypto.randomUUID(), text: 'сходить под себя', isDone: true },
-        { id: crypto.randomUUID(), text: 'сходить покурить', isDone: false },
-    ])
+    const tasksState = initTasksState();
+    const tasks = tasksState.tasks;
+    const setTodos = tasksState.setTodos;
+    
 
-    const handleChange = (item: { id: `${string}-${string}-${string}-${string}-${string}`, text: string, isDone: boolean }) => {
+    const handleCheckboxChange = (item: { id: `${string}-${string}-${string}-${string}-${string}`, text: string, isDone: boolean }) => {
         const newTasks = tasks.map((i) => {
             return i.id === item.id ? { ...item, isDone: !item.isDone } : i;
         })
@@ -29,18 +29,24 @@ export const MainPage: FC<MainPageProps> = (props) => {
     }
     ///
 
+    const removeTask = (item: { id: `${string}-${string}-${string}-${string}-${string}`, text: string, isDone: boolean }) => {
+        const tasksUpdated = tasks.filter(i => i.id !== item.id)
+        setTodos(tasksUpdated)
+    }
+
     // useRef для инпута
     const inputRef = useRef(null);
 
-    function handleClick() {
+    function handleAddButtonClick() {
         const newTask = { id: crypto.randomUUID(), text: inputRef.current.value, isDone: false }
         const tasksUpdated = [...tasks];
         tasksUpdated.push(newTask)
         setTodos(tasksUpdated)
 
-        // как сделать уникальные id для каждой задачи
         // добавить проверку пустоты input
     }
+
+    // 
 
 
 
@@ -62,7 +68,7 @@ export const MainPage: FC<MainPageProps> = (props) => {
                     {/* <Input type='text' placeholder="новая задача" /> */}
                     <Button
                         type="text"
-                        onClick={handleClick}>
+                        onClick={handleAddButtonClick}>
                         добавить задачу
                     </Button>
 
@@ -75,7 +81,14 @@ export const MainPage: FC<MainPageProps> = (props) => {
             <div className="content-container">
 
                 {tasks.map((item) =>
-                    <Task key={item.id} checked={item.isDone} onChange={() => handleChange(item)}>{item.text}</Task>
+                    <Task
+                        key={item.id}
+                        checked={item.isDone}
+                        onChange={() => handleCheckboxChange(item)}
+                        onClick={()=>removeTask(item)}
+                    >
+                        {item.text}
+                    </Task>
                 )}
             </div>
         </div>
