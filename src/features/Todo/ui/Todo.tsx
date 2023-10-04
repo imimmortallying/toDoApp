@@ -22,74 +22,10 @@ export const Todo: FC<TaskProps> = (props) => {
     const todo = useSelector(state => selectTodoById(state, id))
     const { text, completed, importance, description } = todo;
 
-    function LogLog() { console.log('LogLog') }
 
-    //!DND fight
-    const refButton = useRef(null);
-
-    useEffect(() => {
-        const LogLog2 = (event: any) => {
-            console.log('LogLog2')
-        }
-        const buttonElement = refButton.current;
-        buttonElement.addEventListener('click', LogLog2)
-
-
-        return () => {
-            buttonElement.removeEventListener('click', LogLog2);
-        };
-
-    }, [])
-
-
-    let draggingEle: any;
-    let x = 0;
-    let y = 0;
-    const mouseDownHandler = function (e: any) {
-
-        // e.stopImmediatePropagation();
-        // e.target.removeEventListener('click', LogLog)
-        draggingEle = e.target.closest('.' + cls.Task);
-
-        // Calculate the mouse position
-        const rect = draggingEle.getBoundingClientRect();
-        x = e.pageX - rect.left;
-        y = e.pageY - rect.top;
-        console.log(draggingEle)
-        // console.log(cls.Task)
-
-        // Attach the listeners to `document`
-        document.addEventListener('mousemove', mouseMoveHandler); //! use effect to remove eventListener
-        document.addEventListener('mouseup', mouseUpHandler);
-    };
-
-    const mouseMoveHandler = function (e: any) {
-        // Set position for dragging element
-        draggingEle.style.position = 'absolute';
-        draggingEle.style.top = `${e.pageY - y}px`;
-        draggingEle.style.left = `${e.pageX - x}px`;
-
-    };
-
-    const mouseUpHandler = function () {
-        // Remove the position styles
-        draggingEle.style.removeProperty('top');
-        draggingEle.style.removeProperty('left');
-        draggingEle.style.removeProperty('position');
-
-        x = null;
-        y = null;
-        draggingEle = null;
-
-        // Remove the handlers of `mousemove` and `mouseup`
-        document.removeEventListener('mousemove', mouseMoveHandler);
-        document.removeEventListener('mouseup', mouseUpHandler);
-    };
-
-    //! DND end
     return (
 
-        <div className={classNames(cls.Task, {}, [])} onMouseDown={(e) => mouseDownHandler(e)}>
+        <div className={classNames(cls.Task, {}, [])}>
 
             <Checkbox
                 onChange={() => dispatch(toggle(id))}
@@ -117,10 +53,8 @@ export const Todo: FC<TaskProps> = (props) => {
                 value={importance === 'not chosen' ? 'Выбери статус' : importance}
             />
 
-            <button ref={refButton}>Click</button>
             <Button
-                // onClick={() => dispatch(remove(id))}
-                onClick={(e) => { console.log(e.target) }}
+                onClick={() => dispatch(remove(id))}
 
 
                 className={classNames(cls.Button, {}, [])}
