@@ -1,20 +1,21 @@
 
-import { useState } from "react";
+import { TodoPage } from "pages/TodoPage";
 import "./styles/index.scss";
-import { Button, Checkbox } from 'antd';
 import { MainPage } from "pages/MainPage";
-import { Task } from "entities/Task";
+import { Route, Routes } from "react-router-dom";
+
 
 const App = () => {
-
-    
 
 
     return (
         <div>
-            <MainPage>
+            <Routes>
+                <Route path='/' element={<MainPage/>}/>
+                <Route path='todo' element={<TodoPage/>}/>  
+            </Routes>
 
-            </MainPage>
+
 
         </div >
     )
